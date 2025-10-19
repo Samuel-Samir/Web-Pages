@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Card Printing Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 40px;
+    }
+    h2 {
+      text-align: center;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background: #28a745;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #218838;
+    }
+    .result {
+      margin-top: 25px;
+      background: #f1f1f1;
+      padding: 15px;
+      border-radius: 5px;
+    }
+    .result p {
+      margin: 5px 0;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Card Printing Calculator</h2>
+    <label for="length">Card Length</label>
+    <input type="number" id="length" placeholder="Enter length in cm" step="any">
+
+    <label for="width">Card Width</label>
+    <input type="number" id="width" placeholder="Enter width in cm" step="any">
+
+    <label for="quantity">Quantity</label>
+    <input type="number" id="quantity" placeholder="Enter quantity" step="any">
+
+    <button onclick="calculate()">Calculate</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const staticData = [{"itemCode": "54622", "quantity": 100, "price": 40.0, "width": 9.0, "height": 5.0}, {"itemCode": "54626", "quantity": 100, "price": 80.0, "width": 10.0, "height": 10.0}, {"itemCode": "54630", "quantity": 50, "price": 75.0, "width": 14.5, "height": 10.5}, {"itemCode": "54635", "quantity": 50, "price": 105.0, "width": 14.5, "height": 21.0}, {"itemCode": "54640", "quantity": 50, "price": 65.0, "width": 10.5, "height": 7.25}, {"itemCode": "54645", "quantity": 100, "price": 99.0, "width": 8.0, "height": 12.0}, {"itemCode": "54649", "quantity": 100, "price": 65.0, "width": 10.0, "height": 7.0}];
+    const lookupTable = {"5": {"K": 12, "L": 16}, "6": {"K": 10, "L": 12}, "7": {"K": 8, "L": 12}, "8": {"K": 6, "L": 8}, "9": {"K": 6, "L": 8}, "10": {"K": 6, "L": 8}, "11": {"K": 6, "L": 8}, "12": {"K": 4, "L": 8}, "13": {"K": 4, "L": 4}, "14": {"K": 4, "L": 4}, "15": {"K": 4, "L": 4}, "16": {"K": 4, "L": 4}, "17": {"K": 2, "L": 4}, "18": {"K": 2, "L": 4}, "19": {"K": 2, "L": 4}, "20": {"K": 2, "L": 4}};
+
+    function nearlyEqual(a, b) { return Number(a) === Number(b); }
+
+    function findStaticMatch(A, B, D) {
+      for (const row of staticData) {
+        const w = Number(row.width);
+        const h = Number(row.height);
+        const q = Number(row.quantity);
+        if (nearlyEqual(D, q) &&
+            ((nearlyEqual(A, w) && nearlyEqual(B, h)) || (nearlyEqual(A, h) && nearlyEqual(B, w)))) {
+          return row;
+        }
+      }
+      return null;
+    }
+
+    function round1(x) { return Math.round(x * 10) / 10; }
+
+    function calculate() {
+      const A = parseFloat(document.getElementById('length').value);
+      const B = parseFloat(document.getElementById('width').value);
+      const D = parseFloat(document.getElementById('quantity').value);
+      const resultDiv = document.getElementById('result');
+
+      if (isNaN(A) || isNaN(B) || isNaN(D) || A <= 0 || B <= 0 || D <= 0) {
+        resultDiv.innerHTML = "<p>Please enter valid positive numbers.</p>";
+        return;
+      }
+
+      if (!staticData || staticData.length === 0) {
+        resultDiv.innerHTML = "<p>No data available for now.</p>";
+        return;
+      }
+
+      const match = findStaticMatch(A, B, D);
+      if (match) {
+        resultDiv.innerHTML = `
+          <p><b>Item Code:</b> ${match.itemCode}</p>
+          <p><b>Price:</b> ${match.price}</p>
+          <hr>
+          <p><b>Price per meter:</b> No data available for now</p>
+          <p><b>Number of meters:</b> No data available for now</p>
+          <p><b>Final price:</b> No data available for now</p>
+          <p><b>Total quantity:</b> No data available for now</p>
+          <p><b>Qty/meter length:</b> No data available for now</p>
+          <p><b>Qty/meter width:</b> No data available for now</p>
+          <hr>
+          <p><b>Result Type:</b> Static Data</p>`;
+        return;
+      }
+
+      const K = lookupTable[A]?.K || 0;
+      const L = lookupTable[B]?.L || 0;
+
+      if (!K || !L) {
+        resultDiv.innerHTML = "<p>No lookup value found for this length or width.</p>";
+        return;
+      }
+
+      const J = L * K;
+      const E = D / J;
+      const F = (E <= 10) ? 40 : 30;
+      const G = F * E;
+
+      const E1 = round1(E);
+      const G1 = round1(G);
+
+      resultDiv.innerHTML = `
+        <p><b>Price per meter:</b> ${F}</p>
+        <p><b>Number of meters:</b> ${E1}</p>
+        <p><b>Final price:</b> ${G1}</p>
+        <p><b>Total quantity:</b> ${J}</p>
+        <p><b>Qty/meter length:</b> ${K}</p>
+        <p><b>Qty/meter width:</b> ${L}</p>
+        <hr>
+        <p><b>Code:</b> 1234</p>
+        <p><b>Result Type:</b> Calculated by Meter</p>`;
+    }
+  </script>
+</body>
+</html>
