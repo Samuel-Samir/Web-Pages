@@ -77,7 +77,39 @@
   </div>
 
   <script>
-    const staticData = [{"itemCode": "54622", "quantity": 100, "price": 40.0, "width": 9.0, "height": 5.0}, {"itemCode": "54626", "quantity": 100, "price": 80.0, "width": 10.0, "height": 10.0}, {"itemCode": "54630", "quantity": 50, "price": 75.0, "width": 14.5, "height": 10.5}, {"itemCode": "54635", "quantity": 50, "price": 105.0, "width": 14.5, "height": 21.0}, {"itemCode": "54640", "quantity": 50, "price": 65.0, "width": 10.5, "height": 7.25}, {"itemCode": "54645", "quantity": 100, "price": 99.0, "width": 8.0, "height": 12.0}, {"itemCode": "54649", "quantity": 100, "price": 65.0, "width": 10.0, "height": 7.0}];
+const staticData = [
+  {"itemCode": "54622", "width": 5, "height": 9, "quantity": 100, "price": 40},
+  {"itemCode": "54623", "width": 5, "height": 9, "quantity": 200, "price": 65},
+  {"itemCode": "54624", "width": 5, "height": 9, "quantity": 500, "price": 95},
+  {"itemCode": "54625", "width": 5, "height": 9, "quantity": 1000, "price": 135},
+  {"itemCode": "54626", "width": 10, "height": 10, "quantity": 100, "price": 80},
+  {"itemCode": "54627", "width": 10, "height": 10, "quantity": 200, "price": 140},
+  {"itemCode": "54628", "width": 10, "height": 10, "quantity": 500, "price": 260},
+  {"itemCode": "54629", "width": 10, "height": 10, "quantity": 1000, "price": 400},
+  {"itemCode": "54630", "width": 10.5, "height": 14.5, "quantity": 50, "price": 75},
+  {"itemCode": "54631", "width": 10.5, "height": 14.5, "quantity": 100, "price": 100},
+  {"itemCode": "54632", "width": 10.5, "height": 14.5, "quantity": 200, "price": 140},
+  {"itemCode": "54633", "width": 10.5, "height": 14.5, "quantity": 500, "price": 310},
+  {"itemCode": "54634", "width": 10.5, "height": 14.5, "quantity": 1000, "price": 515},
+  {"itemCode": "54635", "width": 21, "height": 14.5, "quantity": 50, "price": 105},
+  {"itemCode": "54636", "width": 21, "height": 14.5, "quantity": 100, "price": 140},
+  {"itemCode": "54637", "width": 21, "height": 14.5, "quantity": 200, "price": 270},
+  {"itemCode": "54638", "width": 21, "height": 14.5, "quantity": 500, "price": 510},
+  {"itemCode": "54639", "width": 21, "height": 14.5, "quantity": 1000, "price": 820},
+  {"itemCode": "54640", "width": 7.25, "height": 10.5, "quantity": 50, "price": 65},
+  {"itemCode": "54641", "width": 7.25, "height": 10.5, "quantity": 100, "price": 85},
+  {"itemCode": "54642", "width": 7.25, "height": 10.5, "quantity": 250, "price": 140},
+  {"itemCode": "54643", "width": 7.25, "height": 10.5, "quantity": 500, "price": 225},
+  {"itemCode": "54644", "width": 7.25, "height": 10.5, "quantity": 1000, "price": 355},
+  {"itemCode": "54645", "width": 8, "height": 12, "quantity": 100, "price": 99},
+  {"itemCode": "54646", "width": 8, "height": 12, "quantity": 250, "price": 160},
+  {"itemCode": "54647", "width": 8, "height": 12, "quantity": 500, "price": 210},
+  {"itemCode": "54648", "width": 8, "height": 12, "quantity": 1000, "price": 410},
+  {"itemCode": "54649", "width": 7, "height": 10, "quantity": 100, "price": 65},
+  {"itemCode": "54650", "width": 7, "height": 10, "quantity": 200, "price": 100},
+  {"itemCode": "54651", "width": 7, "height": 10, "quantity": 500, "price": 180},
+  {"itemCode": "54652", "width": 7, "height": 10, "quantity": 1000, "price": 345}
+];
     const lookupTable = {"5": {"K": 12, "L": 16}, "6": {"K": 10, "L": 12}, "7": {"K": 8, "L": 12}, "8": {"K": 6, "L": 8}, "9": {"K": 6, "L": 8}, "10": {"K": 6, "L": 8}, "11": {"K": 6, "L": 8}, "12": {"K": 4, "L": 8}, "13": {"K": 4, "L": 4}, "14": {"K": 4, "L": 4}, "15": {"K": 4, "L": 4}, "16": {"K": 4, "L": 4}, "17": {"K": 2, "L": 4}, "18": {"K": 2, "L": 4}, "19": {"K": 2, "L": 4}, "20": {"K": 2, "L": 4}};
 
     function nearlyEqual(a, b) { return Number(a) === Number(b); }
