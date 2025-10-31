@@ -62,14 +62,14 @@
 <body>
   <div class="container">
     <h2>Card Printing Calculator</h2>
-    <label for="length">Card Length</label>
-    <input type="number" id="length" placeholder="Enter length in cm" step="any">
+    <label for="cardLength">Card Length</label>
+    <input type="number" id="cardLength" placeholder="Enter length in cm" step="any">
 
-    <label for="width">Card Width</label>
-    <input type="number" id="width" placeholder="Enter width in cm" step="any">
+    <label for="cardWidth">Card Width</label>
+    <input type="number" id="cardWidth" placeholder="Enter width in cm" step="any">
 
-    <label for="quantity">Quantity</label>
-    <input type="number" id="quantity" placeholder="Enter quantity" step="any">
+    <label for="cardQuantity">Quantity</label>
+    <input type="number" id="cardQuantity" placeholder="Enter quantity" step="any">
 
     <button onclick="calculate()">Calculate</button>
 
@@ -77,76 +77,104 @@
   </div>
 
   <script>
-      const staticData = [
-        {"itemCode": "54622", "width": 5, "height": 9, "quantity": 100, "price": 40},
-        {"itemCode": "54623", "width": 5, "height": 9, "quantity": 200, "price": 65},
-        {"itemCode": "54624", "width": 5, "height": 9, "quantity": 500, "price": 95},
-        {"itemCode": "54625", "width": 5, "height": 9, "quantity": 1000, "price": 135},
-        {"itemCode": "54626", "width": 10, "height": 10, "quantity": 100, "price": 80},
-        {"itemCode": "54627", "width": 10, "height": 10, "quantity": 200, "price": 140},
-        {"itemCode": "54628", "width": 10, "height": 10, "quantity": 500, "price": 260},
-        {"itemCode": "54629", "width": 10, "height": 10, "quantity": 1000, "price": 400},
-        {"itemCode": "54630", "width": 10.5, "height": 14.5, "quantity": 50, "price": 75},
-        {"itemCode": "54631", "width": 10.5, "height": 14.5, "quantity": 100, "price": 100},
-        {"itemCode": "54632", "width": 10.5, "height": 14.5, "quantity": 200, "price": 140},
-        {"itemCode": "54633", "width": 10.5, "height": 14.5, "quantity": 500, "price": 310},
-        {"itemCode": "54634", "width": 10.5, "height": 14.5, "quantity": 1000, "price": 515},
-        {"itemCode": "54635", "width": 21, "height": 14.5, "quantity": 50, "price": 105},
-        {"itemCode": "54636", "width": 21, "height": 14.5, "quantity": 100, "price": 140},
-        {"itemCode": "54637", "width": 21, "height": 14.5, "quantity": 200, "price": 270},
-        {"itemCode": "54638", "width": 21, "height": 14.5, "quantity": 500, "price": 510},
-        {"itemCode": "54639", "width": 21, "height": 14.5, "quantity": 1000, "price": 820},
-        {"itemCode": "54640", "width": 7.25, "height": 10.5, "quantity": 50, "price": 65},
-        {"itemCode": "54641", "width": 7.25, "height": 10.5, "quantity": 100, "price": 85},
-        {"itemCode": "54642", "width": 7.25, "height": 10.5, "quantity": 250, "price": 140},
-        {"itemCode": "54643", "width": 7.25, "height": 10.5, "quantity": 500, "price": 225},
-        {"itemCode": "54644", "width": 7.25, "height": 10.5, "quantity": 1000, "price": 355},
-        {"itemCode": "54645", "width": 8, "height": 12, "quantity": 100, "price": 99},
-        {"itemCode": "54646", "width": 8, "height": 12, "quantity": 250, "price": 160},
-        {"itemCode": "54647", "width": 8, "height": 12, "quantity": 500, "price": 210},
-        {"itemCode": "54648", "width": 8, "height": 12, "quantity": 1000, "price": 410},
-        {"itemCode": "54649", "width": 7, "height": 10, "quantity": 100, "price": 65},
-        {"itemCode": "54650", "width": 7, "height": 10, "quantity": 200, "price": 100},
-        {"itemCode": "54651", "width": 7, "height": 10, "quantity": 500, "price": 180},
-        {"itemCode": "54652", "width": 7, "height": 10, "quantity": 1000, "price": 345}
-      ];
+    // --- Static data stays exactly the same ---
+    const staticData = [
+      {"itemCode": "54622", "width": 5, "height": 9, "quantity": 100, "price": 40},
+      {"itemCode": "54623", "width": 5, "height": 9, "quantity": 200, "price": 65},
+      {"itemCode": "54624", "width": 5, "height": 9, "quantity": 500, "price": 95},
+      {"itemCode": "54625", "width": 5, "height": 9, "quantity": 1000, "price": 135},
+      {"itemCode": "54626", "width": 10, "height": 10, "quantity": 100, "price": 80},
+      {"itemCode": "54627", "width": 10, "height": 10, "quantity": 200, "price": 140},
+      {"itemCode": "54628", "width": 10, "height": 10, "quantity": 500, "price": 260},
+      {"itemCode": "54629", "width": 10, "height": 10, "quantity": 1000, "price": 400},
+      {"itemCode": "54630", "width": 10.5, "height": 14.5, "quantity": 50, "price": 75},
+      {"itemCode": "54631", "width": 10.5, "height": 14.5, "quantity": 100, "price": 100},
+      {"itemCode": "54632", "width": 10.5, "height": 14.5, "quantity": 200, "price": 140},
+      {"itemCode": "54633", "width": 10.5, "height": 14.5, "quantity": 500, "price": 310},
+      {"itemCode": "54634", "width": 10.5, "height": 14.5, "quantity": 1000, "price": 515},
+      {"itemCode": "54635", "width": 21, "height": 14.5, "quantity": 50, "price": 105},
+      {"itemCode": "54636", "width": 21, "height": 14.5, "quantity": 100, "price": 140},
+      {"itemCode": "54637", "width": 21, "height": 14.5, "quantity": 200, "price": 270},
+      {"itemCode": "54638", "width": 21, "height": 14.5, "quantity": 500, "price": 510},
+      {"itemCode": "54639", "width": 21, "height": 14.5, "quantity": 1000, "price": 820},
+      {"itemCode": "54640", "width": 7.25, "height": 10.5, "quantity": 50, "price": 65},
+      {"itemCode": "54641", "width": 7.25, "height": 10.5, "quantity": 100, "price": 85},
+      {"itemCode": "54642", "width": 7.25, "height": 10.5, "quantity": 250, "price": 140},
+      {"itemCode": "54643", "width": 7.25, "height": 10.5, "quantity": 500, "price": 225},
+      {"itemCode": "54644", "width": 7.25, "height": 10.5, "quantity": 1000, "price": 355},
+      {"itemCode": "54645", "width": 8, "height": 12, "quantity": 100, "price": 99},
+      {"itemCode": "54646", "width": 8, "height": 12, "quantity": 250, "price": 160},
+      {"itemCode": "54647", "width": 8, "height": 12, "quantity": 500, "price": 210},
+      {"itemCode": "54648", "width": 8, "height": 12, "quantity": 1000, "price": 410},
+      {"itemCode": "54649", "width": 7, "height": 10, "quantity": 100, "price": 65},
+      {"itemCode": "54650", "width": 7, "height": 10, "quantity": 200, "price": 100},
+      {"itemCode": "54651", "width": 7, "height": 10, "quantity": 500, "price": 180},
+      {"itemCode": "54652", "width": 7, "height": 10, "quantity": 1000, "price": 345}
+    ];
 
-    const lookupTable = {"5": {"K": 12, "L": 16}, "6": {"K": 10, "L": 12}, "7": {"K": 8, "L": 12}, "8": {"K": 6, "L": 8}, "9": {"K": 6, "L": 8}, "10": {"K": 6, "L": 8}, "11": {"K": 6, "L": 8}, "12": {"K": 4, "L": 8}, "13": {"K": 4, "L": 4}, "14": {"K": 4, "L": 4}, "15": {"K": 4, "L": 4}, "16": {"K": 4, "L": 4}, "17": {"K": 2, "L": 4}, "18": {"K": 2, "L": 4}, "19": {"K": 2, "L": 4}, "20": {"K": 2, "L": 4}};
+    // --- Lookup table: renamed keys + added sizes 1–4 (per your instructions) ---
+    // cardsPerMeterLength: number of cards per meter along the length (height) direction
+    // cardsPerMeterWidth:  number of cards per meter along the width direction
+    const lookupTable = {
+      1:  { cardsPerMeterLength: 30, cardsPerMeterWidth: 44 },
+      2:  { cardsPerMeterLength: 20, cardsPerMeterWidth: 28 },
+      3:  { cardsPerMeterLength: 16, cardsPerMeterWidth: 20 },
+      4:  { cardsPerMeterLength: 14, cardsPerMeterWidth: 20 },
 
+      5:  { cardsPerMeterLength: 12, cardsPerMeterWidth: 16 },
+      6:  { cardsPerMeterLength: 10, cardsPerMeterWidth: 12 },
+      7:  { cardsPerMeterLength: 8,  cardsPerMeterWidth: 12 },
+      8:  { cardsPerMeterLength: 6,  cardsPerMeterWidth: 8  },
+      9:  { cardsPerMeterLength: 6,  cardsPerMeterWidth: 8  },
+      10: { cardsPerMeterLength: 6,  cardsPerMeterWidth: 8  },
+      11: { cardsPerMeterLength: 6,  cardsPerMeterWidth: 8  },
+      12: { cardsPerMeterLength: 4,  cardsPerMeterWidth: 8  },
+      13: { cardsPerMeterLength: 4,  cardsPerMeterWidth: 4  },
+      14: { cardsPerMeterLength: 4,  cardsPerMeterWidth: 4  },
+      15: { cardsPerMeterLength: 4,  cardsPerMeterWidth: 4  },
+      16: { cardsPerMeterLength: 4,  cardsPerMeterWidth: 4  },
+      17: { cardsPerMeterLength: 2,  cardsPerMeterWidth: 4  },
+      18: { cardsPerMeterLength: 2,  cardsPerMeterWidth: 4  },
+      19: { cardsPerMeterLength: 2,  cardsPerMeterWidth: 4  },
+      20: { cardsPerMeterLength: 2,  cardsPerMeterWidth: 4  }
+    };
+
+    // --- Helpers (unchanged logic, clearer names) ---
     function nearlyEqual(a, b) { return Number(a) === Number(b); }
+    function round1(x) { return Math.round(x * 10) / 10; }
 
-    function findStaticMatch(A, B, D) {
+    // --- Static match check (unchanged logic) ---
+    function findStaticMatch(cardLength, cardWidth, cardQuantity) {
       for (const row of staticData) {
         const w = Number(row.width);
         const h = Number(row.height);
         const q = Number(row.quantity);
-        if (nearlyEqual(D, q) &&
-            ((nearlyEqual(A, w) && nearlyEqual(B, h)) || (nearlyEqual(A, h) && nearlyEqual(B, w)))) {
+        if (
+          nearlyEqual(cardQuantity, q) &&
+          ((nearlyEqual(cardLength, w) && nearlyEqual(cardWidth, h)) ||
+           (nearlyEqual(cardLength, h) && nearlyEqual(cardWidth, w)))
+        ) {
           return row;
         }
       }
       return null;
     }
 
-    function round1(x) { return Math.round(x * 10) / 10; }
-
+    // --- Main calculation (same logic; clearer variable names & output labels) ---
     function calculate() {
-      const A = parseFloat(document.getElementById('length').value);
-      const B = parseFloat(document.getElementById('width').value);
-      const D = parseFloat(document.getElementById('quantity').value);
+      const cardLength = parseFloat(document.getElementById('cardLength').value);
+      const cardWidth  = parseFloat(document.getElementById('cardWidth').value);
+      const cardQuantity = parseFloat(document.getElementById('cardQuantity').value);
       const resultDiv = document.getElementById('result');
 
-      if (isNaN(A) || isNaN(B) || isNaN(D) || A <= 0 || B <= 0 || D <= 0) {
+      if (isNaN(cardLength) || isNaN(cardWidth) || isNaN(cardQuantity) ||
+          cardLength <= 0 || cardWidth <= 0 || cardQuantity <= 0) {
         resultDiv.innerHTML = "<p>Please enter valid positive numbers.</p>";
         return;
       }
 
-      if (!staticData || staticData.length === 0) {
-        resultDiv.innerHTML = "<p>No data available for now.</p>";
-        return;
-      }
-
-      const match = findStaticMatch(A, B, D);
+      // 1) Try static data first
+      const match = findStaticMatch(cardLength, cardWidth, cardQuantity);
       if (match) {
         resultDiv.innerHTML = `
           <p><b>Item Code:</b> ${match.itemCode}</p>
@@ -163,29 +191,31 @@
         return;
       }
 
-      const K = lookupTable[A]?.K || 0;
-      const L = lookupTable[B]?.L || 0;
+      // 2) Calculated by meter (same equations; renamed variables)
+      const cardsPerMeterLength = lookupTable[cardLength]?.cardsPerMeterLength || 0;
+      const cardsPerMeterWidth  = lookupTable[cardWidth]?.cardsPerMeterWidth  || 0;
 
-      if (!K || !L) {
+      if (!cardsPerMeterLength || !cardsPerMeterWidth) {
         resultDiv.innerHTML = "<p>No lookup value found for this length or width.</p>";
         return;
       }
 
-      const J = L * K;
-      const E = D / J;
-      const F = (E <= 10) ? 40 : 30;
-      const G = F * E;
+      const totalCardsPerMeter = cardsPerMeterWidth * cardsPerMeterLength; // J
+      const metersNeeded = cardQuantity / totalCardsPerMeter;              // E
+      const pricePerMeter = (metersNeeded <= 10) ? 40 : 30;                // F
+      const finalPrice = pricePerMeter * metersNeeded;                     // G
 
-      const E1 = round1(E);
-      const G1 = round1(G);
+      const metersNeeded1 = round1(metersNeeded);
+      const finalPrice1 = round1(finalPrice);
 
+      // keep your requested output order
       resultDiv.innerHTML = `
-        <p><b>Price per meter:</b> ${F}</p>
-        <p><b>Number of meters:</b> ${E1}</p>
-        <p><b>Final price:</b> ${G1}</p>
-        <p><b>Total quantity:</b> ${J}</p>
-        <p><b>Qty/meter length:</b> ${K}</p>
-        <p><b>Qty/meter width:</b> ${L}</p>
+        <p><b>Number of meters:</b> ${metersNeeded1}</p>
+        <p><b>Price per meter:</b> ${pricePerMeter}</p>
+        <p><b>Final price:</b> ${finalPrice1}</p>
+        <p><b>Total quantity:</b> ${totalCardsPerMeter}</p>
+        <p><b>Qty/meter length:</b> ${cardsPerMeterLength}</p>
+        <p><b>Qty/meter width:</b> ${cardsPerMeterWidth}</p>
         <hr>
         <p><b>Code:</b> 1234</p>
         <p><b>Result Type:</b> Calculated by Meter</p>`;
