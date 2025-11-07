@@ -33,14 +33,14 @@
   <div class="container">
     <h2>Sticker Price Calculator</h2>
 
-    <label for="width">Width</label>
-    <input id="width" type="number" step="any" placeholder="Enter width (cm)" />
+    <label for="stickerWidth">Sticker Width (cm)</label>
+    <input id="stickerWidth" type="number" step="any" placeholder="Enter width" />
 
-    <label for="height">Height</label>
-    <input id="height" type="number" step="any" placeholder="Enter height (cm)" />
+    <label for="stickerHeight">Sticker Height (cm)</label>
+    <input id="stickerHeight" type="number" step="any" placeholder="Enter height" />
 
-    <label for="quantity">Quantity</label>
-    <input id="quantity" type="number" step="1" placeholder="Enter quantity" />
+    <label for="stickerQuantity">Quantity</label>
+    <input id="stickerQuantity" type="number" step="1" placeholder="Enter quantity" />
 
     <button onclick="calculate()">Calculate</button>
 
@@ -48,6 +48,9 @@
   </div>
 
   <script>
+    // ===========================================
+    // 📦 Static Data (predefined sticker prices)
+    // ===========================================
     const staticData = [
       { price: 40,  quantity: 300, size: 1, code: 54263 },
       { price: 60,  quantity: 500, size: 1, code: 54264 },
@@ -66,46 +69,60 @@
       { price: 140, quantity: 200, size: 6, code: 54277 }
     ];
 
-    const perMeter = {
+    // ===========================================
+    // 📏 Stickers-per-meter reference table
+    // ===========================================
+    const stickersPerMeter = {
       1:62,2:36,3:25,4:18,5:14,6:12,7:11,8:9,9:8,10:7,11:7,12:6,13:6,14:5,15:5,
       16:5,17:5,18:4,19:4,20:4,21:4,22:3,23:3,24:3,25:3,26:3,27:3,28:3,29:3,30:2
     };
 
-    function getMeterPriceAndCode(meters){
-      if (meters <= 5)  return { pricePerMeter: 120, code: 54314 };
-      if (meters <= 10) return { pricePerMeter: 90,  code: 54315 };
+    // ===========================================
+    // 💰 Determine price per meter and code
+    // ===========================================
+    function getMeterPricing(metersRequired){
+      if (metersRequired <= 5)  return { pricePerMeter: 120, code: 54314 };
+      if (metersRequired <= 10) return { pricePerMeter: 90,  code: 54315 };
       return { pricePerMeter: 70, code: 54316 };
     }
 
-    function round1(x){ return Math.round(x * 10) / 10; }
+    // Utility to round numbers to 1 decimal
+    function roundToOneDecimal(num){ return Math.round(num * 10) / 10; }
 
+    // ===========================================
+    // 🧮 Main Calculation
+    // ===========================================
     function calculate(){
-      const w = parseFloat(document.getElementById('width').value);
-      const h = parseFloat(document.getElementById('height').value);
-      const q = parseInt(document.getElementById('quantity').value, 10);
-      const out = document.getElementById('result');
+      const stickerWidth = parseFloat(document.getElementById('stickerWidth').value);
+      const stickerHeight = parseFloat(document.getElementById('stickerHeight').value);
+      const stickerQuantity = parseInt(document.getElementById('stickerQuantity').value, 10);
+      const resultDiv = document.getElementById('result');
 
-      if (!w || !h || !q || w <= 0 || h <= 0 || q <= 0){
-        out.innerHTML = "<p>Please enter valid positive numbers.</p>";
+      // Validation
+      if (!stickerWidth || !stickerHeight || !stickerQuantity || stickerWidth <= 0 || stickerHeight <= 0 || stickerQuantity <= 0){
+        resultDiv.innerHTML = "<p>Please enter valid positive numbers.</p>";
         return;
       }
 
-      const largest = Math.max(w, h);
-      const largestInt = Number.isInteger(largest) ? largest : null;
-      let matched = null;
+      // ===========================================
+      // Step 1️⃣ — Try Static Data Lookup
+      // ===========================================
+      const largestDimension = Math.max(stickerWidth, stickerHeight);
+      const largestInt = Number.isInteger(largestDimension) ? largestDimension : null;
+      let matchedStaticRecord = null;
       if (largestInt !== null){
-        matched = staticData.find(r => r.size === largestInt && r.quantity === q);
+        matchedStaticRecord = staticData.find(record => record.size === largestInt && record.quantity === stickerQuantity);
       }
 
-      if (matched){
-        out.innerHTML = `
-          <p><b>Price:</b> ${matched.price}</p>
-          <p><b>Code:</b> ${matched.code}</p>
+      if (matchedStaticRecord){
+        resultDiv.innerHTML = `
+          <p><b>Price:</b> ${matchedStaticRecord.price}</p>
+          <p><b>Code:</b> ${matchedStaticRecord.code}</p>
           <hr>
-          <p><b>Quantity per meter (width):</b> No data available for now</p>
-          <p><b>Quantity per meter (height):</b> No data available for now</p>
+          <p><b>Stickers per meter (Width):</b> No data available for now</p>
+          <p><b>Stickers per meter (Height):</b> No data available for now</p>
           <p><b>Total stickers per meter:</b> No data available for now</p>
-          <p><b>Number of meters:</b> No data available for now</p>
+          <p><b>Meters required:</b> No data available for now</p>
           <p><b>Price per meter:</b> No data available for now</p>
           <p><b>Final price:</b> No data available for now</p>
           <hr>
@@ -114,35 +131,67 @@
         return;
       }
 
-      const wKey = Number.isInteger(w) ? w : null;
-      const hKey = Number.isInteger(h) ? h : null;
+      // ===========================================
+      // Step 2️⃣ — Fallback: Calculate by Meter
+      // ===========================================
+      const widthKey = Number.isInteger(stickerWidth) ? stickerWidth : null;
+      const heightKey = Number.isInteger(stickerHeight) ? stickerHeight : null;
 
-      if (wKey === null || hKey === null || perMeter[wKey] === undefined || perMeter[hKey] === undefined){
-        out.innerHTML = "<p>No per-meter lookup value found for this width or height. Please use integer sizes from 1 to 30.</p>";
+      if (widthKey === null || heightKey === null || stickersPerMeter[widthKey] === undefined || stickersPerMeter[heightKey] === undefined){
+        resultDiv.innerHTML = "<p>No per-meter lookup value found for this width or height. Please use integer sizes from 1 to 30.</p>";
         return;
       }
 
-      const perW = perMeter[wKey];
-      const perH = perMeter[hKey];
-      const totalPerMeter = perW * perH;
-      const metersNeeded = q / totalPerMeter;
+      const stickersPerMeterWidth = stickersPerMeter[widthKey];
+      const stickersPerMeterHeight = stickersPerMeter[heightKey];
+      const totalStickersPerMeter = stickersPerMeterWidth * stickersPerMeterHeight;
+      const metersRequired = stickerQuantity / totalStickersPerMeter;
 
-      const { pricePerMeter, code } = getMeterPriceAndCode(metersNeeded);
-      const meters1 = round1(metersNeeded);
-      const finalPrice = round1(metersNeeded * pricePerMeter);
+      const { pricePerMeter, code } = getMeterPricing(metersRequired);
+      const roundedMeters = roundToOneDecimal(metersRequired);
+      const totalPrice = roundToOneDecimal(metersRequired * pricePerMeter);
 
-      out.innerHTML = `
-        <p><b>Quantity per meter (width):</b> ${perW}</p>
-        <p><b>Quantity per meter (height):</b> ${perH}</p>
-        <p><b>Total stickers per meter:</b> ${totalPerMeter}</p>
-        <p><b>Number of meters:</b> ${meters1}</p>
+      // Display results
+      resultDiv.innerHTML = `
+        <p><b>Stickers per meter (Width):</b> ${stickersPerMeterWidth}</p>
+        <p><b>Stickers per meter (Height):</b> ${stickersPerMeterHeight}</p>
+        <p><b>Total stickers per meter:</b> ${totalStickersPerMeter}</p>
+        <p><b>Meters required:</b> ${roundedMeters}</p>
         <p><b>Price per meter:</b> ${pricePerMeter}</p>
-        <p><b>Final price:</b> ${finalPrice}</p>
+        <p><b>Final price:</b> ${totalPrice}</p>
         <hr>
         <p><b>Code:</b> ${code}</p>
         <p><b>Result Type:</b> Calculated by Meter</p>
       `;
+
+      // Step 3️⃣ — Add red warning if meters < 1
+      if (metersRequired < 0.5) {
+        const warning = document.createElement("div");
+        warning.style.backgroundColor = "#f8d7da";
+        warning.style.color = "#721c24";
+        warning.style.padding = "10px";
+        warning.style.marginTop = "10px";
+        warning.style.borderRadius = "5px";
+        warning.style.border = "1px solid #f5c6cb";
+        warning.innerHTML = "⚠️ Minimum printable length is 0.5 meter — adjusted to 0.5 meter for pricing.";
+        resultDiv.appendChild(warning);
+      }
     }
+
+    // ===========================================
+    // 📘 FLOW SUMMARY (for documentation)
+    // ===========================================
+    // 1️⃣ Validate user input (width, height, quantity).
+    // 2️⃣ Check staticData for an exact match → if found, display predefined price/code.
+    // 3️⃣ If no static match, lookup stickersPerMeter for both width & height.
+    // 4️⃣ Calculate:
+    //     - totalStickersPerMeter = widthValue × heightValue
+    //     - metersRequired = quantity ÷ totalStickersPerMeter
+    // 5️⃣ Determine price per meter and code based on metersRequired:
+    //     ≤5 → 120 (54314), ≤10 → 90 (54315), >10 → 70 (54316)
+    // 6️⃣ Show final computed details (rounded).
+    // 7️⃣ If metersRequired < 1 → show red warning box about minimum 1 meter.
   </script>
 </body>
 </html>
+
